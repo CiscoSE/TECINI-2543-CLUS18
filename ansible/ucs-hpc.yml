@@ -1,0 +1,9 @@
+---
+# file: ucs-hpc.yml
+- hosts: ucs
+  connection: local
+  gather_facts: no
+  roles:
+    - network
+    - servers
+

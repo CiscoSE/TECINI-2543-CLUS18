@@ -1,0 +1,8 @@
+[all:vars]
+# None for now
+
+# Note: This ucs_ip is my local UCSPE VM IP.  Change it to match
+# the value your VM claimed from DHCP
+[ucs]
+ucspe
+

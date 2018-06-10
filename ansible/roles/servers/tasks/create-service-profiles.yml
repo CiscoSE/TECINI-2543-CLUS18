@@ -1,0 +1,35 @@
+# file: create-service-profile-templates.yml
+
+- name : Create HPC Service Profile Templates
+  ucs_service_profile_template:
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    template_type:  updating-template
+    uuid_pool: "{{ item.uuid_pool }}"
+    local_disk_policy: "{{ item.local_disk }}"
+    lan_connectivity_policy: "{{ item.lcp }}"
+    san_connectivity_policy: "{{ item.scp }}"
+    boot_policy: "{{ item.boot }}"
+    maintenance_policy: "{{ item.maint }}"
+    server_pool: "{{ item.server_pool }}"
+    server_pool_qualification: "{{ item.server_qual }}"
+    power_state: "down"
+    host_firmware_package: "{{ item.host_firmware }}"
+    bios_policy: "{{ item.bios }}"
+    mgmt_ip_pool: "{{ item.mgmt_ip }}"
+    scrub_policy: "{{ item.scrub }}"
+  with_items: "{{ hpc_service_profile_templates }}"
+
+- name : Create HPC Service Profiles
+  ucs_service_profile_from_template:
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+    name: "{{ item.name }}"
+    source_template: "{{ item.template }}"
+    power_state: "down"
+    user_label: "{{ item.label }}"
+  with_items: "{{ hpc_service_profiles }}"

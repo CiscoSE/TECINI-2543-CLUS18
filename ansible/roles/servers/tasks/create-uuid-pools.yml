@@ -1,0 +1,15 @@
+
+# file: create-uuid-pools.yml
+
+ - name : "Create HPC UUID Pools"
+   ucs_uuid_pool:
+     hostname: "{{ this_ucs_hostname }}"
+     username: "{{ this_ucs_username }}"
+     password: "{{ this_ucs_password }}"
+     name: "{{ item.name }}"
+     order: "sequential"
+     prefix: "{{ item.prefix }}"
+     first_uuid: "{{ item.first }}"
+     last_uuid: "{{ item.last }}"
+   with_items: "{{ hpc_uuid_pools }}"
+ 

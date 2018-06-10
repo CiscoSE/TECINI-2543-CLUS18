@@ -1,0 +1,4 @@
+# file: main.yml
+
+- include: create-uuid-pools.yml
+- include: create-service-profiles.yml

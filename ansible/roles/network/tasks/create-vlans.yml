@@ -1,0 +1,13 @@
+# file: create-vlans.yml
+
+ - name: Create HPC VLANs
+   ucs_vlans:
+     hostname: "{{ this_ucs_hostname }}"
+     username: "{{ this_ucs_username }}"
+     password: "{{ this_ucs_password }}"
+     name: "{{ item.name }}"
+     fabric: "{{ item.fabric }}"
+     id: "{{ item.id }}"
+     native: "{{ item.native }}"
+   with_items: "{{ hpc_vlans }}"
+

@@ -1,0 +1,19 @@
+
+- Vagrantfile for building the Ansible with UCSM environment
+  - Stub built, testing needed
+- Dockerfile for building the Ansible with UCSM environment
+  - Stub built, testing needed
+- convert host_vars (and other location) - { } syntax to multi-line for
+  better readability
+
+ucsm-ansible extensions
+- usNIC connection policy
+- usNIC configuration in ucs_vnic_template.py
+- BIOS POLICY!?!?!?
+- local disk policy (RAID1, for example)
+- maintenance policy
+- network control policy
+- firmware management (requires firmware upload prior to using)
+- scrub policy
+- SP from Template - ability to specify clones 
+

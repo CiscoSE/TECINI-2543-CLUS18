@@ -1,0 +1,148 @@
+---
+# file: ucspe.yml
+
+this_ucs_hostname: 192.168.253.131
+this_ucs_username: ucspe
+this_ucs_password: ucspe
+
+# UUID are hex values (base-16)
+hpc_uuid_pools:
+  - name: "hpcUUID1"
+    prefix: "31415926-5359-9793"
+    first: "0000-000000000001"
+    last: "0000-000000000100"
+
+hpc_mac_pools:
+  - name: "hpcMacA"
+    first: "00:25:B5:A0:00:00"
+    last: "00:25:B5:A0:00:FF"
+  - name: "hpcMacB"
+    first: "00:25:B5:B0:00:00"
+    last: "00:25:B5:B0:00:FF"
+
+hpc_ip_pools:
+  - name: "hpcMgmt1"
+    first: "192.168.254.1"
+    last: "192.168.254.253"
+    gateway: "192.168.254.254"
+    netmask: "255.255.255.0"
+    dns1: "8.8.8.8"
+    dns2: "8.8.4.4"
+
+hpc_vlans:
+  - name: "hpc_mgmt"
+    fabric: "common"
+    id: "1000"
+    native: "no"
+  - name: "hpc_pfs"
+    fabric: "common"
+    id: "1001"
+    native: "no"
+  - name: "hpc_usnic"
+    fabric: "common"
+    id: "1002"
+    native: "no"
+
+# By defining both sets of adapters (fabric A, B), you give the server freedom to 
+# choose the fabric.  Otherwise, you could simply declare a single NIC per fabric
+# and let UCS failover work behind the scenes
+hpc_vnics:
+  - name: "hpc-mgmt-A" 
+    description: "Fabric A interface for HPC Mgmt VLAN"
+    fabric: "A-B"
+    vlan_name: "hpc_mgmt"
+    native: "no"
+    mac_pool: "hpcMacA"
+    mtu: "1500"
+    template_type: "updating-template"
+    type: "primary"
+    peer: "hpc-mgmt-B"
+  - name: "hpc-mgmt-B"
+    description: "Fabric B interface for HPC Mgmt VLAN"
+    fabric: "B-A"
+    vlan_name: "hpc_mgmt"
+    native: "no"
+    mac_pool: "hpcMacB"
+    mtu: "1500"
+    template_type: "updating-template"
+    type: "secondary"
+    peer: "hpc-mgmt-A"
+  - name: "hpc-pfs-A"
+    description: "Fabric A interface for HPC Parallel FS VLAN"
+    fabric: "A-B"
+    vlan_name: "hpc_pfs"
+    native: "no"
+    mac_pool: "hpcMacA"
+    mtu: "9000"
+    template_type: "updating-template"
+    type: "primary"
+    peer: "hpc-pfs-B"
+  - name: "hpc-pfs-B"
+    description: "Fabric B interface for HPC Parallel FS VLAN"
+    fabric: "B-A"
+    vlan_name: "hpc_pfs"
+    native: "no"
+    mac_pool: "hpcMacB"
+    mtu: "9000"
+    template_type: "updating-template"
+    type: "secondary"
+    peer: "hpc-pfs-A"
+  - name: "hpc-usnic-A"
+    description: "Fabric A interface for HPC usNIC VLAN"
+    fabric: "A-B"
+    vlan_name: "hpc_usnic"
+    native: "no"
+    mac_pool: "hpcMacA"
+    mtu: "9000"
+    template_type: "updating-template"
+    type: "primary"
+    peer: "hpc-usnic-B"
+  - name: "hpc-usnic-B"
+    description: "Fabric B interface for HPC usNIC VLAN"
+    fabric: "B-A"
+    vlan_name: "hpc_usnic"
+    native: "no"
+    mac_pool: "hpcMacB"
+    mtu: "9000"
+    template_type: "updating-template"
+    type: "secondary"
+    peer: "hpc-usnic-A"
+
+hpc_compute_lan_connectivity:
+  name: "HPC-Compute-LAN"
+  description: "HPC Compute Node LAN Connectivity"
+
+hpc_compute_connectivity:
+  - { name: "Mgmt-A", template: "hpc-mgmt-A", policy: "Linux" }
+  - { name: "Mgmt-B", template: "hpc-mgmt-B", policy: "Linux" }
+  - { name: "PFS-A", template: "hpc-pfs-A", policy: "Linux" }
+  - { name: "PFS-B", template: "hpc-pfs-B", policy: "Linux" }
+  - { name: "USNIC-A", template: "hpc-usnic-A", policy: "Linux" }
+  - { name: "USNIC-B", template: "hpc-usnic-B", policy: "Linux" } 
+
+hpc_service_profile_templates:
+  - name: "HPC:Compute:44C"
+    description: "44-core template for HPC Compute Nodes"
+    uuid_pool: hpcUUID1
+    local_disk: "RAID1:Protect"
+    lcp: "{{ hpc_compute_lan_connectivity.name }}"
+    scp: ""
+    boot: "PXE:CIMC:LUN"
+    maint: "UserAck:NoBoot"
+    server_pool: ""
+    server_qual: ""
+    host_firmware: ""
+    bios: "HPC:Compute"
+    mgmt_ip: hpcMgmt1
+    scrub: "Disk:Bios:NoFlex"
+
+hpc_service_profiles:
+  - name: "rack1-slot1"
+    template: "HPC:Compute:44C"
+    label: "AssetTag-r1s1"
+  - name: "rack1-slot2"
+    template: "HPC:Compute:44C"
+    label: "AssetTag-r1s2"
+  - name: "rack1-slot3"
+    template: "HPC:Compute:44C"
+    label: "AssetTag-r1s3"

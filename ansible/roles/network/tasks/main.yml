@@ -1,0 +1,7 @@
+# file: main.yml
+
+ - include: create-mac-pools.yml
+ - include: create-ip-pools.yml
+ - include: create-vlans.yml
+ - include: create-vnics.yml
+

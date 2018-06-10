@@ -1,0 +1,32 @@
+# file: create-vnics.yml
+
+ - name : Create HPC VNIC Templates
+   ucs_vnic_template:
+     hostname: "{{ this_ucs_hostname }}"
+     username: "{{ this_ucs_username }}"
+     password: "{{ this_ucs_password }}"
+     name: "{{ item.name }}"
+     description: "{{ item.description }}"
+     fabric: "{{ item.fabric }}"
+     target: adapter
+     redundancy_type: none
+     template_type: "{{ item.template_type }}"
+     mac_pool: "{{ item.mac_pool }}"
+     mtu: "{{ item.mtu }}"
+     vlans_list: 
+       - name: "{{ item.vlan_name }}"
+         native: "{{ item.native }}"
+   with_items: "{{ hpc_vnics }}"
+
+ - name : Create HPC LAN Connectivity Policy
+   ucs_lan_connectivity:
+     hostname: "{{ this_ucs_hostname }}"
+     username: "{{ this_ucs_username }}"
+     password: "{{ this_ucs_password }}"
+     name: "{{ hpc_compute_lan_connectivity.name }}"
+     description: "{{ hpc_compute_lan_connectivity.description }}"
+     vnic_list:
+     - name: "{{ item.name }}"
+       vnic_template: "{{ item.template }}"
+       adapter_policy: "{{ item.policy }}"
+   with_items: "{{ hpc_compute_connectivity }}"

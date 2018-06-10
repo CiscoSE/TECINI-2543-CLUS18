@@ -1,0 +1,6 @@
+---
+# file: site.yml
+
+# Import the various roles in this site
+- import_playbook: ucs-hpc.yml
+
