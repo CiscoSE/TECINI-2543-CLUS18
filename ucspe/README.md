@@ -24,3 +24,10 @@ Now, the UCS Platform Emulator is ready to boot.
 
 Once booted, load the core policy configuration from the XML in the ''ucspe'' 
 directory
+
+![Admin Import Configuration](../images/admin-import-pane.png)
+
+![Create Import Operation](../images/create-import-operation.png)
+
+![Define Import Operation](../images/define-import-operation.png)
+
