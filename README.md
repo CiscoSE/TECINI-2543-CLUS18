@@ -36,7 +36,7 @@ Close the Host Network Manager and edit the UCSPE VM settings.  Under the Networ
 settings of the VM, for Adapters 1-3, change the "Attached To" setting to 
 "Host-only Adapter" and ensure the "Name" setting matches the host network you created.
 
-!(https://github.com/CiscoSE/TECINI-2543-CLUS18/blob/master/images/convert-adapter-host-only.png)
+![VM Network Settings Change](https://github.com/CiscoSE/TECINI-2543-CLUS18/blob/master/images/convert-adapter-host-only.png)
 
 Now, the UCS Platform Emulator is ready to boot.
 
